@@ -2,4 +2,4 @@
 # RelogiosVetoriais_C
 Base para a implementação de relógios vetoriais em C
 
-Dupla: João Pedro Soares e Elison Monteiro Passos
+Dupla: João Pedro Soares, Rueslei Conceicao dos Santos e Elison Monteiro Passos
