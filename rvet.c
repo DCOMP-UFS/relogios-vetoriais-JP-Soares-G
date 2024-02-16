@@ -26,11 +26,13 @@ void Event(int pid, Clock *clock){
 
 
 void Send(int myRank, int pid, Clock *clock){
+   clock->p[myRank]++;   
    printf("Process: %d, sending... Clock: (%d, %d, %d) to Process %d\n", myRank, clock->p[0], clock->p[1], clock->p[2], pid);
    MPI_Send(clock, 3, MPI_INT, pid, 0, MPI_COMM_WORLD );
 }
 
 void Receive(int myRank, int pid, Clock *clock){
+   clock->p[myRank]++;  
    Clock received_data;
    MPI_Recv(&received_data, 3, MPI_INT, pid, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
    clock->p[0] = MAX(received_data.p[0], clock->p[0]);
@@ -47,19 +49,14 @@ void process0(){
    Clock clock = {{0,0,0}};
    Event(myRank, &clock);
    
-   Event(myRank, &clock);
    Send(myRank, 1, &clock);
    
-   Event(myRank, &clock);
    Receive(myRank, 1, &clock);
    
-   Event(myRank, &clock);
    Send(myRank, 2, &clock);
    
-   Event(myRank, &clock);
    Receive(myRank, 2, &clock);
    
-   Event(myRank, &clock);
    Send(myRank, 1, &clock);
    Event(myRank, &clock);
    
@@ -71,11 +68,8 @@ void process1(){
    int myRank = 1;
    Clock clock = {{0,0,0}};
 
-   Event(myRank, &clock);
    Send(myRank, 0, &clock);
-   Event(myRank, &clock);
    Receive(myRank, 0, &clock);
-   Event(myRank, &clock);
    Receive(myRank, 0, &clock);
    printf("Process: %d, Clock: (%d, %d, %d)\n", 1, clock.p[0], clock.p[1], clock.p[2]);
 }
@@ -85,9 +79,7 @@ void process2(){
    int myRank = 2;
    Clock clock = {{0,0,0}};
    Event(myRank, &clock);
-   Event(myRank, &clock);
    Send(myRank, 0, &clock);
-   Event(myRank, &clock);
    Receive(myRank, 0, &clock);
    printf("Process: %d, Clock: (%d, %d, %d)\n", 2, clock.p[0], clock.p[1], clock.p[2]);
    
